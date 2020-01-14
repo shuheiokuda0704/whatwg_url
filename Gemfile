@@ -3,5 +3,6 @@ source "https://rubygems.org"
 # Specify your gem's dependencies in whatwg_url.gemspec
 gemspec
 
-gem "rake", "~> 12.0"
-gem "rspec", "~> 3.0"
+gem "rake"
+gem "rspec"
+gem 'simplecov', require: false, group: :test
