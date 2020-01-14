@@ -1,6 +1,52 @@
 # frozen_string_literal: true
 
 module WhatwgUrl
+  # Copy from RFC2396_REGEXP
+  module WHATWG_REGEXP
+    #
+    # Patterns used to parse URI's
+    #
+    module PATTERN
+      # :stopdoc:
+
+      # RFC 2396 (URI Generic Syntax)
+      # RFC 2732 (IPv6 Literal Addresses in URL's)
+      # RFC 2373 (IPv6 Addressing Architecture)
+
+      # alpha         = lowalpha | upalpha
+      ALPHA = "a-zA-Z"
+      # alphanum      = alpha | digit
+      ALNUM = "#{ALPHA}\\d"
+
+      # hex           = digit | "A" | "B" | "C" | "D" | "E" | "F" |
+      #                         "a" | "b" | "c" | "d" | "e" | "f"
+      HEX = "a-fA-F\\d"
+      # escaped       = "%" hex hex
+      ESCAPED = "%[#{HEX}]{2}"
+      # mark          = "-" | "_" | "." | "!" | "~" | "*" | "'" |
+      #                 "(" | ")"
+      # unreserved    = alphanum | mark
+      UNRESERVED = "\\-_.!~*'()#{ALNUM}"
+      # reserved      = ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+" |
+      #                 "$" | ","
+      # reserved      = ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+" |
+      #                 "$" | "," | "[" | "]" (RFC 2732)
+      RESERVED = ";/?:@&=+$,\\[\\]"
+
+      # domainlabel   = alphanum | alphanum *( alphanum | "-" ) alphanum
+      DOMLABEL = "(?:[#{ALNUM}](?:[-#{ALNUM}]*[#{ALNUM}])?)"
+      # toplabel      = alpha | alpha *( alphanum | "-" ) alphanum
+      TOPLABEL = "(?:[#{ALPHA}](?:[-#{ALNUM}]*[#{ALNUM}])?)"
+      # hostname      = *( domainlabel "." ) toplabel [ "." ]
+      HOSTNAME = "(?:#{DOMLABEL}\\.)*#{TOPLABEL}\\.?"
+
+      # :startdoc:
+    end # PATTERN
+
+    # :startdoc:
+  end # REGEXP
+
+  # Copy from rfc2986_parser and rfc3986_parser
   class WhatwgParser # :nodoc:
     # URI defined in RFC3986
     # this regexp is modified not to host is not empty string
@@ -604,49 +650,4 @@ module WhatwgUrl
       end
     end
   end # class Parser
-
-  # Copy from RFC2396_REGEXP
-  module WHATWG_REGEXP
-    #
-    # Patterns used to parse URI's
-    #
-    module PATTERN
-      # :stopdoc:
-
-      # RFC 2396 (URI Generic Syntax)
-      # RFC 2732 (IPv6 Literal Addresses in URL's)
-      # RFC 2373 (IPv6 Addressing Architecture)
-
-      # alpha         = lowalpha | upalpha
-      ALPHA = "a-zA-Z"
-      # alphanum      = alpha | digit
-      ALNUM = "#{ALPHA}\\d"
-
-      # hex           = digit | "A" | "B" | "C" | "D" | "E" | "F" |
-      #                         "a" | "b" | "c" | "d" | "e" | "f"
-      HEX = "a-fA-F\\d"
-      # escaped       = "%" hex hex
-      ESCAPED = "%[#{HEX}]{2}"
-      # mark          = "-" | "_" | "." | "!" | "~" | "*" | "'" |
-      #                 "(" | ")"
-      # unreserved    = alphanum | mark
-      UNRESERVED = "\\-_.!~*'()#{ALNUM}"
-      # reserved      = ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+" |
-      #                 "$" | ","
-      # reserved      = ";" | "/" | "?" | ":" | "@" | "&" | "=" | "+" |
-      #                 "$" | "," | "[" | "]" (RFC 2732)
-      RESERVED = ";/?:@&=+$,\\[\\]"
-
-      # domainlabel   = alphanum | alphanum *( alphanum | "-" ) alphanum
-      DOMLABEL = "(?:[#{ALNUM}](?:[-#{ALNUM}]*[#{ALNUM}])?)"
-      # toplabel      = alpha | alpha *( alphanum | "-" ) alphanum
-      TOPLABEL = "(?:[#{ALPHA}](?:[-#{ALNUM}]*[#{ALNUM}])?)"
-      # hostname      = *( domainlabel "." ) toplabel [ "." ]
-      HOSTNAME = "(?:#{DOMLABEL}\\.)*#{TOPLABEL}\\.?"
-
-      # :startdoc:
-    end # PATTERN
-
-    # :startdoc:
-  end # REGEXP
 end # module URI
