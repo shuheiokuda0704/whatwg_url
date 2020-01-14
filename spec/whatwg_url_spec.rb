@@ -33,5 +33,23 @@ RSpec.describe WhatwgUrl do
       expect(url.query).to eq('a=b&c=d')
       expect(url.fragment).to eq(nil)
     end
+
+    it "parses by modified parse method" do
+      url = WhatwgUrl.parse('https://jxck:password@blog.jxck.io/path/to/entry?log=true&lang=ja#main')
+      expect(url.class).to eq(WhatwgUrl::HTTPS)
+      expect(url.href).to eq('https://jxck:password@blog.jxck.io/path/to/entry?log=true&lang=ja#main')
+      expect(url.origin).to eq('')
+      expect(url.protocol).to eq('https:')
+      expect(url.username).to eq('jxck')
+      expect(url.password).to eq('password')
+      expect(url.host).to eq('blog.jxck.io')
+      expect(url.hostname).to eq('blog.jxck.io')
+      expect(url.port).to eq('443')
+      expect(url.pathname).to eq('/path/to/entry')
+      expect(url.search).to eq('?log=true&lang=ja')
+      expect(url.search_params).to eq('')
+      expect(url.hash).to eq('#main')
+    end
+
   end
 end
