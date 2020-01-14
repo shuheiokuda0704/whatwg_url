@@ -3,13 +3,11 @@
 # = Copy and modify uri/common.rb
 #
 
-require_relative "rfc2396_parser"
-require_relative "rfc3986_parser"
+require_relative "whatwg_parser"
 
 module WhatwgUrl
-  REGEXP = RFC2396_REGEXP
-  Parser = RFC2396_Parser
-  RFC3986_PARSER = RFC3986_Parser.new
+  REGEXP = WHATWG_REGEXP
+  Parser = WhatwgParser
 
   # URI::Parser.new
   DEFAULT_PARSER = Parser.new
@@ -187,7 +185,7 @@ module WhatwgUrl
   #   # => ["http", nil, "www.ruby-lang.org", nil, nil, "/", nil, nil, nil]
   #
   def self.split(uri)
-    RFC3986_PARSER.split(uri)
+    DEFAULT_PARSER.split(uri)
   end
 
   #
@@ -224,7 +222,7 @@ module WhatwgUrl
   # invalid URI characters.
   #
   def self.parse(uri)
-    RFC3986_PARSER.parse(uri)
+    DEFAULT_PARSER.parse(uri)
   end
 
   #
@@ -261,7 +259,7 @@ module WhatwgUrl
   #   # => #<URI::HTTP http://example.com/foo/bar>
   #
   def self.join(*str)
-    RFC3986_PARSER.join(*str)
+    DEFAULT_PARSER.join(*str)
   end
 
   #
